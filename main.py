@@ -77,9 +77,9 @@ class Sender:
         try:
             self.smtp = smtplib.SMTP_SSL("smtp.gmail.com", 465)
             self.smtp.login(self.sender[1], self.password)
-            logger.info("Successfully log in.")
+            logger.info("Successfully logged in.")
         except Exception as e:
-            logger.warning("Failed log in.")
+            logger.warning("Failed logged in.")
             exception_reporter(e)
 
     def send(self, message, title="Delivery Tracking Updates"):
@@ -107,16 +107,16 @@ class Sender:
 
 
 def run():
-    logger.info(f"Delivery Tracking Started")
+    logger.info(f"Delivery Tracking Started.")
     t = Tracker()
     data = t.orange_delivery()
     if data[1] == {}:
         logger.info("No Delivery Updates.")
-        logger.info(f"Delivery Tracking Ended")
+        logger.info(f"Delivery Tracking Ended.")
         quit()
     s = Sender()
     s.send(s.message_generator(data))
-    logger.info(f"Delivery Tracking Ended")
+    logger.info(f"Delivery Tracking Ended.")
 
 
 if __name__ == '__main__':
@@ -129,4 +129,5 @@ if __name__ == '__main__':
     logger.addHandler(file_handler)
     logger.addHandler(console_handler)
     run()
+
 
