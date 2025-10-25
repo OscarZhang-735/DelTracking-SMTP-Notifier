@@ -11,9 +11,9 @@ RUNNING_MODE = "LOCAL"
 
 
 def exception_reporter(exception):
-    exec_sender = Sender()
+    ex_sender = Sender()
     msg = f"An error occurred at {datetime.datetime.now()}.\n\nError\n: {exception}"
-    exec_sender.send(msg, title="Tracking System Failed")
+    ex_sender.send(msg, title="Tracking System Failed")
     logger.error(msg)
     logger.warning("Failure Reported.")
     quit()
@@ -129,3 +129,4 @@ if __name__ == '__main__':
     logger.addHandler(file_handler)
     logger.addHandler(console_handler)
     run()
+
