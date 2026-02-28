@@ -6,6 +6,7 @@ import requests
 import datetime
 import logging
 import os
+from lxml import etree, html
 
 RUNNING_MODE = "LOCAL"
 
@@ -39,6 +40,7 @@ class Tracker:
         self.tracking_nums = self.data["tracking_nums"]
 
     def orange_delivery(self):
+        # Outdated version
         base_url = r"http://203.195.161.123:8180/trackList?searchList.waybillnumber="
         results = []
         try:
@@ -57,6 +59,33 @@ class Tracker:
             Utils.Files.write_json("config.json", self.data)
 
             return [results, change]
+        except Exception as e:
+            logger.warning("Failed tracking.")
+            exception_reporter(e)
+
+    def orange_delivery_new(self):
+        base_url = r"http://49.232.162.70:8082/trackIndex.htm?documentCode="
+        try:
+            index = 0
+            change = {}
+            for tracking_num in self.tracking_nums:
+                response_data = requests.post(base_url + str(tracking_num)).content
+                logger.info(f"{self.tracking_nums.index(tracking_num) + 1}/{len(self.tracking_nums)}: Query succeeded.")
+                tree = html.fromstring(response_data)
+                track = str(tree.xpath("/html/body/div[2]/div[1]/div/div[2]/ul[2]/li[1]/text()")[0])
+                outdate = str(tree.xpath("/html/body/div[2]/div[1]/div/div[2]/ul[2]/li[4]/text()")[0])
+                outinfo = str(tree.xpath("/html/body/div[2]/div[1]/div/div[2]/ul[2]/li[5]/text()")[0])
+                if self.data["results"][index]["outinfo"] != outinfo:
+                    if self.data["results"][index]["track"] != track:
+                        logger.error("Results mismatch.")
+                    logger.info(track + " Updated.")
+                    self.data["results"][index]["outinfo"] = outinfo
+                    self.data["results"][index]["outdate"] = outdate
+                    change[track] = [self.data["results"][index]["outinfo"], outinfo, outdate]
+                index += 1
+            Utils.Files.write_json("config.json", self.data)
+
+            return [len(self.tracking_nums), change]
         except Exception as e:
             logger.warning("Failed tracking.")
             exception_reporter(e)
@@ -96,10 +125,11 @@ class Sender:
             logger.warning("Failed sent.")
             exception_reporter(e)
 
-    def message_generator(self, data: list):
+    @staticmethod
+    def message_generator(data: list):
         msg = "Updated Deliveries:\n\n"
         i = 0
-        msg += f"{len(data[1])} of {len(data[0])} deliveries updated.\n\n"
+        msg += f"{len(data[1])} of {data[0]} deliveries updated.\n\n"
         for num in data[1]:
             i += 1
             msg += f"Package ({i}/{len(data[1])}):\nSystem Number: {num}\nPrevious: {data[1][num][0]}\nNow: {data[1][num][1]} \nLast Update: {data[1][num][2]}\n\n"
@@ -109,13 +139,13 @@ class Sender:
 def run():
     logger.info(f"Delivery Tracking Started.")
     t = Tracker()
-    data = t.orange_delivery()
+    data = t.orange_delivery_new()
     if data[1] == {}:
         logger.info("No Delivery Updates.")
         logger.info(f"Delivery Tracking Ended.")
         quit()
     s = Sender()
-    s.send(s.message_generator(data))
+    s.send(s.message_generator(data=data))
     logger.info(f"Delivery Tracking Ended.")
 
 
@@ -129,5 +159,3 @@ if __name__ == '__main__':
     logger.addHandler(file_handler)
     logger.addHandler(console_handler)
     run()
-
-

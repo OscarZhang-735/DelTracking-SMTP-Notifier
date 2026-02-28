@@ -1,15 +1,27 @@
 {
   "sender": [
-    "Nickname",
-    "*@gmail.com"
+    "My Delivery Tracking",
+    "zhang.notification@gmail.com"
   ],
-  "passwd": "",
+  "passwd": "hkpj zvby mmju vzqa",
   "receiver": [
-    "Nickname",
-    "*@gmail.com"
+    "Oscar Zhang",
+    "oscarzhang735@gmail.com"
   ],
   "tracking_nums": [
+    "10246549730001",
+    "10246549730002"
   ],
   "results": [
+    {
+      "track": "10246549730001",
+      "outdate": "2026-02-28 21:38:37\u00a0",
+      "outinfo": "\u8f6c\u8fd0\u4e2d\u5df2\u62b5\u8fbe\u673a\u573a\uff0c\u9884\u8ba13\u67081\u65e5\u822a\u73ed\u79bb\u5f00/Hong kong\u00a0\r\n                            "
+    },
+    {
+      "track": "10246549730002",
+      "outdate": "2026-02-28 21:38:37\u00a0",
+      "outinfo": "\u8f6c\u8fd0\u4e2d\u5df2\u62b5\u8fbe\u673a\u573a\uff0c\u9884\u8ba13\u67081\u65e5\u822a\u73ed\u79bb\u5f00/Hong kong\u00a0\r\n                            "
+    }
   ]
 }
