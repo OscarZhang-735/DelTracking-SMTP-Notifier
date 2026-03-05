@@ -79,9 +79,10 @@ class Tracker:
                     if self.data["results"][index]["track"] != track:
                         logger.error("Results mismatch.")
                     logger.info(track + " Updated.")
+                    prev_outinfo = self.data["results"][index]["outinfo"]
                     self.data["results"][index]["outinfo"] = outinfo
                     self.data["results"][index]["outdate"] = outdate
-                    change[track] = [self.data["results"][index]["outinfo"], outinfo, outdate]
+                    change[track] = [prev_outinfo, outinfo, outdate]
                 index += 1
             Utils.Files.write_json("config.json", self.data)
 
