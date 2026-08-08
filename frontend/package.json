@@ -8,6 +8,7 @@
     "build": "vue-tsc -b && vite build",
     "typecheck": "vue-tsc -b",
     "test": "vitest run",
+    "test:e2e": "playwright test",
     "lint": "eslint ."
   },
   "dependencies": {
@@ -16,6 +17,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.35.0",
+    "@playwright/test": "^1.62.1",
     "@types/node": "^22.18.0",
     "@vitejs/plugin-vue": "^6.0.1",
     "@vue/test-utils": "^2.4.6",

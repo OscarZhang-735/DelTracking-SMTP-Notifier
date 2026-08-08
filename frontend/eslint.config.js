@@ -10,6 +10,12 @@ export default [
   {
     files: ['**/*.vue'],
     languageOptions: {
+      globals: {
+        HTMLButtonElement: 'readonly',
+        KeyboardEvent: 'readonly',
+        URLSearchParams: 'readonly',
+        window: 'readonly',
+      },
       parserOptions: {
         parser: tseslint.parser,
       },

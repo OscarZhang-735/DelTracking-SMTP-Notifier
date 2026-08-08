@@ -13,6 +13,8 @@ develop-eggs/
 dist/
 node_modules/
 coverage/
+playwright-report/
+test-results/
 *.tsbuildinfo
 downloads/
 eggs/
