@@ -12,8 +12,10 @@ dependencies = [
   "apscheduler>=3.11,<4.0",
   "argon2-cffi>=25.1,<26.0",
   "cryptography>=45,<47",
+  "email-validator>=2.2,<3.0",
   "fastapi>=0.116,<1.0",
   "httpx>=0.28,<1.0",
+  "itsdangerous>=2.2,<3.0",
   "pydantic-settings>=2.10,<3.0",
   "sqlalchemy>=2.0,<3.0",
   "uvicorn[standard]>=0.35,<1.0",
@@ -38,6 +40,9 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.ruff.lint.flake8-bugbear]
+extend-immutable-calls = ["fastapi.Depends", "fastapi.Query"]
 
 [tool.setuptools.packages.find]
 include = ["app*"]

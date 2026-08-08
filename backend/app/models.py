@@ -51,6 +51,7 @@ class Admin(TimestampMixin, Base):
     username: Mapped[str] = mapped_column(String(100), unique=True, index=True)
     password_hash: Mapped[str] = mapped_column(String(255))
     enabled: Mapped[bool] = mapped_column(Boolean, default=True)
+    session_version: Mapped[int] = mapped_column(Integer, default=1)
 
 
 class TrackingItem(TimestampMixin, Base):

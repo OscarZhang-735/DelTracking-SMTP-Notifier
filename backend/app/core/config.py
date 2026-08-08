@@ -1,4 +1,5 @@
 from functools import lru_cache
+from typing import Literal
 
 from pydantic import Field, SecretStr, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -19,6 +20,9 @@ class Settings(BaseSettings):
     admin_password: SecretStr | None = None
     tracking_app_id: SecretStr | None = None
     app_timezone: str = "Asia/Shanghai"
+    app_environment: Literal["development", "test", "production"] = "development"
+    cookie_secure: bool = False
+    session_max_age_seconds: int = Field(default=28800, ge=300, le=604800)
 
     schedule_interval_minutes: int = Field(default=30, ge=5, le=1440)
 
