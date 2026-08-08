@@ -1,0 +1,29 @@
+{
+  "status": 1,
+  "info": "",
+  "data": {
+    "shipment": {
+      "shipment_id": "SHIPMENT-001",
+      "client_reference": "TEST-TRACKING-001",
+      "outer_carrier_code": "sample-carrier",
+      "outer_carrier_tracking_number": "CARRIER-001",
+      "status": "in_transit",
+      "country": "加拿大",
+      "postcode": "A1A1A1",
+      "traces": [
+        {
+          "time": "2026-08-05 17:44:35",
+          "info": "货物已放行"
+        },
+        {
+          "time": "2026-08-01 21:10:56",
+          "info": "已装柜"
+        }
+      ],
+      "parcel_count": 1,
+      "ignored_provider_field": false
+    }
+  },
+  "cost_time": 0.25,
+  "request_time": "2026-08-08 17:16:53"
+}

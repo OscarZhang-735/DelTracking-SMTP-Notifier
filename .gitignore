@@ -11,6 +11,11 @@ __pycache__/
 build/
 develop-eggs/
 dist/
+node_modules/
+coverage/
+playwright-report/
+test-results/
+*.tsbuildinfo
 downloads/
 eggs/
 .eggs/
