@@ -1,0 +1,54 @@
+name: deltracking
+
+services:
+  backend:
+    build:
+      context: ./backend
+    environment:
+      APP_ENVIRONMENT: production
+      APP_TIMEZONE: ${APP_TIMEZONE:-Asia/Shanghai}
+      DATABASE_URL: sqlite:////data/deltracking.db
+      SESSION_SECRET: ${SESSION_SECRET:?SESSION_SECRET is required}
+      SESSION_MAX_AGE_SECONDS: ${SESSION_MAX_AGE_SECONDS:-28800}
+      COOKIE_SECURE: ${COOKIE_SECURE:-true}
+      SMTP_ENCRYPTION_KEY: ${SMTP_ENCRYPTION_KEY:?SMTP_ENCRYPTION_KEY is required}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?ADMIN_PASSWORD is required}
+      TRACKING_APP_ID: ${TRACKING_APP_ID:?TRACKING_APP_ID is required}
+      SCHEDULE_INTERVAL_MINUTES: ${SCHEDULE_INTERVAL_MINUTES:-30}
+    volumes:
+      - deltracking_data:/data
+    init: true
+    restart: unless-stopped
+    stop_grace_period: 20s
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/ready', timeout=3).read()"
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  web:
+    build:
+      context: ./frontend
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8080:8080"
+    init: true
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/health/live"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  deltracking_data:
+    name: deltracking_data
