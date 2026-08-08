@@ -14,6 +14,7 @@ EXPECTED_TABLES = {
     "admins",
     "alembic_version",
     "app_settings",
+    "job_run_items",
     "job_runs",
     "notification_outbox",
     "recipients",

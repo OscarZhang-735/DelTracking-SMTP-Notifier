@@ -156,9 +156,39 @@ class JobRun(Base):
     total_count: Mapped[int] = mapped_column(Integer, default=0)
     success_count: Mapped[int] = mapped_column(Integer, default=0)
     failure_count: Mapped[int] = mapped_column(Integer, default=0)
+    changed_count: Mapped[int] = mapped_column(Integer, default=0)
     error_summary: Mapped[str | None] = mapped_column(Text)
 
     notifications: Mapped[list[NotificationOutbox]] = relationship(back_populates="job_run")
+    items: Mapped[list[JobRunItem]] = relationship(
+        back_populates="job_run",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+    )
+
+
+class JobRunItem(Base):
+    __tablename__ = "job_run_items"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    job_run_id: Mapped[int] = mapped_column(
+        ForeignKey("job_runs.id", ondelete="CASCADE"),
+        index=True,
+    )
+    tracking_item_id: Mapped[int | None] = mapped_column(
+        ForeignKey("tracking_items.id", ondelete="SET NULL"),
+        index=True,
+    )
+    tracking_number: Mapped[str] = mapped_column(String(100))
+    status: Mapped[str] = mapped_column(String(20), index=True)
+    changed: Mapped[bool] = mapped_column(Boolean, default=False)
+    added_event_count: Mapped[int] = mapped_column(Integer, default=0)
+    previous_status: Mapped[str | None] = mapped_column(String(50))
+    current_status: Mapped[str | None] = mapped_column(String(50))
+    error: Mapped[str | None] = mapped_column(Text)
+    checked_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now)
+
+    job_run: Mapped[JobRun] = relationship(back_populates="items")
 
 
 class NotificationOutbox(Base):
