@@ -12,6 +12,7 @@ dependencies = [
   "argon2-cffi>=25.1,<26.0",
   "cryptography>=45,<47",
   "fastapi>=0.116,<1.0",
+  "httpx>=0.28,<1.0",
   "pydantic-settings>=2.10,<3.0",
   "sqlalchemy>=2.0,<3.0",
   "uvicorn[standard]>=0.35,<1.0",
@@ -19,7 +20,6 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-  "httpx>=0.28,<1.0",
   "pytest>=8.4,<9.0",
   "pytest-cov>=6.2,<7.0",
   "ruff>=0.12,<1.0",
@@ -29,6 +29,7 @@ dev = [
 addopts = "-q"
 pythonpath = ["."]
 testpaths = ["tests"]
+markers = ["live: calls the real NextSLS endpoint when explicitly enabled"]
 
 [tool.ruff]
 line-length = 100
